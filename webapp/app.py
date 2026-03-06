@@ -233,6 +233,20 @@ HALL_LABELS = {
 }
 
 
+def _guest_time_range(time_str: str) -> str:
+    """Return 'HH:MM – HH:MM' guest-visible range: start + 2h45min (3h total − 15min cleanup)."""
+    try:
+        h, m = map(int, time_str.split(":"))
+        # Overnight slots 00-02 stored as 24-26h, normalise
+        adj_h = h + 24 if h <= 2 else h
+        end_total = adj_h * 60 + m + 165  # 165 min = 2h 45m
+        end_h = (end_total // 60) % 24
+        end_m = end_total % 60
+        return f"{time_str} – {end_h:02d}:{end_m:02d}"
+    except Exception:
+        return time_str
+
+
 # ─── Routes ───────────────────────────────────────────────────────────────────
 
 @app.get("/api/my/bookings")
@@ -612,7 +626,7 @@ async def api_staff_action(body: StaffActionRequest):
                 f"📋 Бронь #{booking.id}\n"
                 f"🏛 {HALL_LABELS.get(booking.hall, booking.hall)}\n"
                 f"🪑 Стол: {booking.table or '—'}\n"
-                f"📅 {booking.date} в {booking.time}\n"
+                f"📅 {booking.date} в {_guest_time_range(booking.time)}\n"
                 f"👥 Гостей: {booking.guests_count}\n\n"
                 f"Мы ждём вас — стол зарезервирован 🍽"
             )
