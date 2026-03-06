@@ -2668,7 +2668,7 @@ async function staffAction(bookingId, action) {
     });
     const d = await r.json();
     if (r.ok) {
-      const toastMsg = action === "confirm" ? t("action_confirm_ok")
+      const toastMsg = action === "confirm" ? "🟠 " + t("status_en_route")
                      : action === "en_route" ? "🟠 " + t("status_en_route")
                      : action === "arrived" ? "✅ " + t("status_confirmed")
                      : t("action_reject_ok");

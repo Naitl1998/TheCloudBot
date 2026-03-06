@@ -602,20 +602,21 @@ async def api_staff_action(body: StaffActionRequest):
         raise HTTPException(status_code=403, detail="Staff only")
 
     if body.action == "confirm":
-        booking = await set_booking_status(body.booking_id, BookingStatus.CONFIRMED)
+        booking = await set_booking_status(body.booking_id, BookingStatus.EN_ROUTE)
         if not booking:
             raise HTTPException(status_code=404, detail="Booking not found")
         if booking.user_id:
             await _tg_send(
                 booking.user_id,
-                f"✅ <b>Ваша бронь подтверждена!</b>\n\n"
+                f"🟠 <b>Ваша бронь подтверждена! Ждём вас!</b>\n\n"
                 f"📋 Бронь #{booking.id}\n"
                 f"🏛 {HALL_LABELS.get(booking.hall, booking.hall)}\n"
                 f"🪑 Стол: {booking.table or '—'}\n"
                 f"📅 {booking.date} в {booking.time}\n"
-                f"👥 Гостей: {booking.guests_count}"
+                f"👥 Гостей: {booking.guests_count}\n\n"
+                f"Мы ждём вас — стол зарезервирован 🍽"
             )
-        return JSONResponse({"ok": True, "status": "confirmed"})
+        return JSONResponse({"ok": True, "status": "en_route"})
 
     elif body.action == "en_route":
         booking = await set_booking_status(body.booking_id, BookingStatus.EN_ROUTE)
