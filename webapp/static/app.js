@@ -790,6 +790,25 @@ function fmtDate(iso) {
   return `${parseInt(parts[2])} ${months[parseInt(parts[1])-1]}`;
 }
 
+/* ── Booking time range helpers ──
+   addMinutesToSlot: adds N minutes to "HH:MM" string, handles overnight slots.
+   bookingTimeRange: returns "HH:MM – HH:MM" shown to the guest.
+   Duration = 3h total – 15min cleanup = 2h 45min = 165 min visible window. */
+function addMinutesToSlot(timeStr, minutes) {
+  const [h, m] = timeStr.split(":").map(Number);
+  // Overnight slots (00-02) are stored as 24-26, adjust back for display
+  const adjH    = h <= 2 ? h + 24 : h;
+  const totalMin = adjH * 60 + m + minutes;
+  const newH = Math.floor(totalMin / 60) % 24;
+  const newM = totalMin % 60;
+  return `${String(newH).padStart(2, "0")}:${String(newM).padStart(2, "0")}`;
+}
+
+function bookingTimeRange(startTime) {
+  if (!startTime) return startTime;
+  return `${startTime} – ${addMinutesToSlot(startTime, 165)}`;
+}
+
 function hallLabel(h) {
   const labels = { main: t("hall_main"), second: t("hall_second") };
   return labels[h] || LAYOUTS[h]?.hallLabel || h;
@@ -1982,7 +2001,7 @@ function fillFormMeta() {
   document.getElementById("p-hall").textContent  = hallLabel(state.hall);
   document.getElementById("p-table").textContent = `${t("table_prefix")} ${state.table}`;
   document.getElementById("p-date").textContent  = fmtDate(state.date);
-  document.getElementById("p-time").textContent  = state.time;
+  document.getElementById("p-time").textContent  = bookingTimeRange(state.time);
 
   // Deposit banner
   const info      = TABLE_INFO[state.table];
@@ -2163,7 +2182,7 @@ function fillSuccess(d) {
     <b>${t("lbl_hall")}:</b> ${hallLabel(state.hall)}<br>
     <b>${t("lbl_table")}:</b> ${state.table}${noteLine}<br>
     <b>${t("lbl_date")}:</b> ${fmtDate(state.date)}<br>
-    <b>${t("lbl_time")}:</b> ${state.time}<br>
+    <b>${t("lbl_time")}:</b> ${bookingTimeRange(state.time)}<br>
     <b>${t("lbl_guests")}:</b> ${state.guests}<br>
     <b>${t("lbl_name")}:</b> ${guestName}<br>
     <b>${t("lbl_phone")}:</b> ${guestPhone}${depLine}

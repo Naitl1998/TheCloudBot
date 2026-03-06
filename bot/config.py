@@ -69,10 +69,5 @@ TABLE_CAPACITIES: dict[str, dict[str, int]] = {
 
 
 def table_duration_minutes(capacity: int) -> int:
-    """Occupancy duration in minutes based on table capacity."""
-    if capacity >= 5:
-        return 180   # 3 hours  (6+ seats)
-    elif capacity >= 3:
-        return 150   # 2.5 hours (3-4 seats)
-    else:
-        return 120   # 2 hours  (1-2 seats)
+    """Occupancy duration in minutes — fixed 3 hours for all tables."""
+    return 180  # 3 hours for all tables
