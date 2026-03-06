@@ -1,0 +1,46 @@
+{
+  "welcome": "👋 Chào mừng đến với <b>The Cloud</b>!\n\nĐặt bàn tại nhà hàng của chúng tôi ngay trên Telegram.\n\nVui lòng chọn ngôn ngữ / Choose language:",
+  "main_menu": "🏠 Menu chính",
+  "btn_book": "📅 Đặt bàn",
+  "btn_my_bookings": "📋 Đặt chỗ của tôi",
+  "btn_cancel_booking": "❌ Huỷ đặt chỗ",
+  "btn_contact": "📞 Liên hệ",
+  "btn_back": "◀️ Quay lại",
+  "btn_skip": "➡️ Bỏ qua",
+  "btn_confirm": "✅ Xác nhận",
+  "btn_change": "✏️ Chỉnh sửa",
+  "btn_cancel": "❌ Huỷ",
+  "btn_share_contact": "📱 Chia sẻ số điện thoại",
+
+  "choose_hall": "🏛 Chọn khu vực:",
+  "choose_date": "📅 Chọn ngày đặt chỗ:",
+  "choose_time": "⏰ Chọn giờ phù hợp:",
+  "choose_guests": "👥 Có bao nhiêu khách?",
+  "enter_name": "👤 Nhập tên của bạn:",
+  "enter_phone": "📞 Nhập số điện thoại hoặc nhấn nút bên dưới:",
+  "enter_comment": "💬 Có yêu cầu đặc biệt không? Nhập ghi chú hoặc nhấn «Bỏ qua»:",
+  "invalid_phone": "❗ Định dạng số điện thoại không hợp lệ. Vui lòng nhập lại:",
+  "invalid_name": "❗ Tên phải có ít nhất 2 ký tự. Vui lòng thử lại:",
+
+  "booking_summary_title": "📋 Vui lòng kiểm tra thông tin đặt chỗ:",
+  "booking_confirmed_user": "✅ Đặt chỗ <b>#{id}</b> đã được gửi!\n\n⏳ Chúng tôi sẽ xác nhận đặt chỗ của bạn trong vòng <b>15 phút</b>.\n\nCảm ơn bạn đã chọn The Cloud! 🍸",
+  "booking_accepted": "🎉 Đặt chỗ <b>#{id}</b> đã được xác nhận!\n\nHẹn gặp bạn tại The Cloud 🍸",
+  "booking_rejected": "😔 Rất tiếc, đặt chỗ <b>#{id}</b> không thể được chấp nhận.\n\nVui lòng liên hệ với chúng tôi để biết thêm chi tiết.",
+  "booking_cancelled_user": "✅ Đặt chỗ <b>#{id}</b> đã được huỷ thành công.",
+  "no_bookings": "Bạn không có đặt chỗ nào đang hoạt động.",
+  "select_booking_to_cancel": "Chọn đặt chỗ cần huỷ:",
+
+  "contact_info": "📞 <b>Liên hệ The Cloud</b>\n\n🏠 Địa chỉ: {address}\n📱 Điện thoại: {phone}\n📸 Instagram: @thecloudbar_nt\n🕛 Hàng ngày 12:00 – 02:00\n\nChúng tôi rất vui được phục vụ bạn!",
+
+  "admin_new_booking": "🔔 <b>Yêu cầu đặt chỗ mới!</b>\n\n{summary}",
+  "admin_btn_accept": "✅ Chấp nhận",
+  "admin_btn_reject": "❌ Từ chối",
+  "admin_accepted": "✅ Đặt chỗ #{id} đã chấp nhận. Đã thông báo khách.",
+  "admin_rejected": "❌ Đặt chỗ #{id} đã từ chối. Đã thông báo khách.",
+  "admin_no_bookings": "Không có đặt chỗ nào đang hoạt động.",
+  "admin_stats": "📊 <b>Thống kê</b>\nTổng cộng: {total}\nChờ xử lý: {pending}\nĐã xác nhận: {confirmed}\nĐã huỷ: {cancelled}",
+
+  "error_generic": "⚠️ Có lỗi xảy ra. Vui lòng thử lại hoặc nhấn /start",
+  "poster_sync_ok": "✅ Đã đồng bộ với Poster POS",
+  "poster_sync_fail": "⚠️ Không thể đồng bộ với Poster. Đặt chỗ đã được lưu cục bộ."
+}

@@ -1,0 +1,46 @@
+{
+  "welcome": "👋 Welcome to <b>The Cloud</b>!\n\nBook a table at our venue right here in Telegram.\n\nВыберите язык / Choose language:",
+  "main_menu": "🏠 Main Menu",
+  "btn_book": "📅 Book a Table",
+  "btn_my_bookings": "📋 My Bookings",
+  "btn_cancel_booking": "❌ Cancel Booking",
+  "btn_contact": "📞 Contact Us",
+  "btn_back": "◀️ Back",
+  "btn_skip": "➡️ Skip",
+  "btn_confirm": "✅ Confirm",
+  "btn_change": "✏️ Edit",
+  "btn_cancel": "❌ Cancel",
+  "btn_share_contact": "📱 Share Phone Number",
+
+  "choose_hall": "🏛 Choose a hall:",
+  "choose_date": "📅 Choose a date:",
+  "choose_time": "⏰ Choose a time slot:",
+  "choose_guests": "👥 How many guests?",
+  "enter_name": "👤 Enter your name:",
+  "enter_phone": "📞 Enter your phone number or tap the button below:",
+  "enter_comment": "💬 Any special requests? Type a comment or tap Skip:",
+  "invalid_phone": "❗ Invalid phone format. Please enter in format +7XXXXXXXXXX:",
+  "invalid_name": "❗ Name must be at least 2 characters. Please try again:",
+
+  "booking_summary_title": "📋 Please review your booking:",
+  "booking_confirmed_user": "✅ Your booking <b>#{id}</b> has been submitted!\n\n⏳ We will confirm your booking within <b>15 minutes</b>.\n\nThank you for choosing The Cloud! 🍸",
+  "booking_accepted": "🎉 Your booking <b>#{id}</b> is confirmed!\n\nSee you at The Cloud 🍸",
+  "booking_rejected": "😔 Unfortunately, booking <b>#{id}</b> cannot be accepted.\n\nPlease contact us directly for details.",
+  "booking_cancelled_user": "✅ Booking <b>#{id}</b> has been cancelled.",
+  "no_bookings": "You have no active bookings.",
+  "select_booking_to_cancel": "Select a booking to cancel:",
+
+  "contact_info": "📞 <b>The Cloud Contacts</b>\n\n🏠 Address: {address}\n📱 Phone: {phone}\n📸 Instagram: @thecloudbar_nt\n🕛 Daily 12:00 – 02:00\n\nWe look forward to seeing you!",
+
+  "admin_new_booking": "🔔 <b>New booking request!</b>\n\n{summary}",
+  "admin_btn_accept": "✅ Accept",
+  "admin_btn_reject": "❌ Reject",
+  "admin_accepted": "✅ Booking #{id} accepted. Guest notified.",
+  "admin_rejected": "❌ Booking #{id} rejected. Guest notified.",
+  "admin_no_bookings": "No active bookings.",
+  "admin_stats": "📊 <b>Stats</b>\nTotal: {total}\nPending: {pending}\nConfirmed: {confirmed}\nCancelled: {cancelled}",
+
+  "error_generic": "⚠️ Something went wrong. Please try again or type /start",
+  "poster_sync_ok": "✅ Synced with Poster POS",
+  "poster_sync_fail": "⚠️ Could not sync with Poster. Booking saved locally."
+}

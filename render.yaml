@@ -1,7 +1,56 @@
+# Render.com Blueprint — auto-deploy from GitHub
+# https://render.com/docs/blueprint-spec
+#
+# Usage:
+#   1. Push this repo to GitHub
+#   2. Go to https://dashboard.render.com → New → Blueprint → select repo
+#   3. Set BOT_TOKEN and ADMIN_CHAT_ID in the Render dashboard (Environment tab)
+#   4. Deploy — webhook is auto-registered via RENDER_EXTERNAL_URL
+#
+
+# ── PostgreSQL database (persistent — no data loss on redeploy!) ──
+databases:
+  - name: the-cloud-booking-db
+    plan: free
+    databaseName: theclaudbooking
+    user: bookbot
+    region: singapore          # closest to Nha Trang, Vietnam
+
 services:
   - type: web
-    name: the-cloud-bot
+    name: the-cloud-booking
     runtime: docker
+    dockerfilePath: ./Dockerfile
+    region: singapore          # closest to Nha Trang, Vietnam
+    plan: free
+    healthCheckPath: /health
+    autoDeploy: true           # auto-deploy on every push to main branch
     envVars:
+      # ── Required (set manually in Render dashboard) ──
       - key: BOT_TOKEN
+        sync: false
+      - key: ADMIN_CHAT_ID
+        sync: false
+      # ── PostgreSQL (auto-linked from database above) ──
+      - key: DATABASE_URL
+        fromDatabase:
+          name: the-cloud-booking-db
+          property: connectionString
+      # ── Optional staff IDs (comma-separated Telegram user IDs) ──
+      - key: STAFF_IDS
+        sync: false
+      # ── Venue info ──
+      - key: VENUE_ADDRESS
+        value: "163 Nguyễn Thiện Thuật, Lộc Thọ, Nha Trang, Khánh Hòa 650000"
+      - key: VENUE_PHONE
+        value: "+84792533508"
+      # ── Server ──
+      - key: PORT
+        value: "8080"
+      # ── Auto-set by Render ──
+      # RENDER_EXTERNAL_URL — injected automatically, used as WEBAPP_URL
+      # ── Poster POS (optional — leave empty until ready) ──
+      - key: POSTER_TOKEN
+        sync: false
+      - key: POSTER_ACCOUNT
         sync: false

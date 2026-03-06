@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="theme-color" content="#080c14"/>
+  <title>The Cloud</title>
+  <link rel="stylesheet" href="/static/style.css?v={{ asset_v }}"/>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+
+<div class="orbs" aria-hidden="true">
+  <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+</div>
+
+<div class="app">
+
+  <!-- ── Top bar ── -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <button id="lang-toggle" class="lang-toggle-btn" aria-label="Switch language">🇷🇺 RU</button>
+      <button class="icon-btn" id="global-back" style="display:none" aria-label="Back">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+    </div>
+    <div class="topbar-mid">
+      <span class="topbar-name"><svg class="topbar-cloud-svg" viewBox="0 0 80 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 40C8 40 4 36 4 30c0-5 3-9 8-10 1-7 7-12 14-12 5 0 9 2 12 6 2-1 4-2 6-2 6 0 10 4 11 9 4 2 7 6 7 11 0 7-5 12-12 12z" stroke="#c9a84c" stroke-width="2" fill="none" opacity="0.7"/><path d="M26 40v-8m4 8v-12m4 12v-8m-12 0h16" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round" opacity="0.35"/></svg> THE CLOUD</span>
+      <span class="topbar-hint" id="topbar-hint" data-i18n="hint_default">Бронирование столика</span>
+      <div class="vn-clock" id="vn-clock">
+        <span class="vn-clock-time" id="vn-time">--:--</span>
+        <span class="vn-clock-label">Nha Trang</span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="step-pips" id="step-pips">
+        <span class="pip active"></span>
+        <span class="pip"></span>
+        <span class="pip"></span>
+        <span class="pip"></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Booking Screens ── -->
+  <div id="booking-view">
+    <div class="screens">
+
+      <!-- Screen 0: Floor plan — pick a table first -->
+      <div class="screen active" id="s0">
+        <div class="scroller">
+
+          <!-- Working hours info -->
+          <div class="venue-info-bar">
+            <span class="vi-item">🕛 12:00 – 02:00</span>
+            <span class="vi-sep">·</span>
+            <a class="vi-item vi-location" id="vi-location" href="https://www.google.com/maps/place/The+Cloud/@12.236706,109.1915263,17z/data=!3m1!4b1!4m6!3m5!1s0x31706764f4eb8abb:0x16a95c67f72d9589!8m2!3d12.236706!4d109.1941066!16s%2Fg%2F11c741zn3l?entry=ttu&g_ep=EgoyMDI2MDIyNS4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener">📍 Nha Trang</a>
+            <span class="vi-sep">·</span>
+            <a class="vi-item vi-insta" href="https://www.instagram.com/thecloudbar_nt/" target="_blank" rel="noopener">📸 @thecloudbar_nt</a>
+          </div>
+
+          <!-- Venue photo hero -->
+          <div class="venue-hero">
+            <div class="venue-hero-track" id="venue-hero-track">
+              <div class="venue-hero-slide">
+                <img src="/static/img/venue1.jpg" alt="The Cloud — кальяны" loading="eager"/>
+                <div class="venue-hero-overlay venue-hero-overlay--dim"></div>
+              </div>
+              <div class="venue-hero-slide">
+                <img src="/static/img/venue2.jpg" alt="The Cloud — фасад" loading="lazy"/>
+                <div class="venue-hero-overlay"></div>
+              </div>
+              <div class="venue-hero-slide">
+                <img src="/static/img/venue3.jpg" alt="The Cloud — бар" loading="lazy"/>
+                <div class="venue-hero-overlay"></div>
+              </div>
+              <div class="venue-hero-slide">
+                <img src="/static/img/venue4.jpg" alt="The Cloud — лаунж" loading="lazy"/>
+                <div class="venue-hero-overlay"></div>
+              </div>
+              <div class="venue-hero-slide">
+                <img src="/static/img/venue5.jpg" alt="The Cloud — бургер" loading="lazy"/>
+                <div class="venue-hero-overlay"></div>
+              </div>
+              <div class="venue-hero-slide">
+                <img src="/static/img/venue6.jpg" alt="The Cloud — коктейли" loading="lazy"/>
+                <div class="venue-hero-overlay"></div>
+              </div>
+            </div>
+            <div class="venue-hero-dots">
+              <span class="vhd active" data-slide="0"></span>
+              <span class="vhd" data-slide="1"></span>
+              <span class="vhd" data-slide="2"></span>
+              <span class="vhd" data-slide="3"></span>
+              <span class="vhd" data-slide="4"></span>
+              <span class="vhd" data-slide="5"></span>
+            </div>
+            <div class="venue-hero-badge">
+              <svg class="venue-cloud-icon" viewBox="0 0 80 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 40C8 40 4 36 4 30c0-5 3-9 8-10 1-7 7-12 14-12 5 0 9 2 12 6 2-1 4-2 6-2 6 0 10 4 11 9 4 2 7 6 7 11 0 7-5 12-12 12z" stroke="#c9a84c" stroke-width="2" fill="none" opacity="0.6"/>
+                <path d="M26 40v-8m4 8v-12m4 12v-8m-12 0h16" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+              </svg>
+              <span>THE CLOUD</span>
+            </div>
+          </div>
+
+          <!-- Menu button -->
+          <a class="menu-big-btn" href="https://ru.qrcodechimp.com/page/rz2bjtfrslv2?v=chk1771139491" target="_blank" rel="noopener">
+            <span class="menu-big-btn-icon">🍽</span>
+            <div class="menu-big-btn-body">
+              <span class="menu-big-btn-title" data-i18n="btn_menu_title">Меню ресторана</span>
+              <span class="menu-big-btn-sub" data-i18n="btn_menu_sub">Еда · Напитки · Кальян</span>
+            </div>
+            <svg class="menu-big-btn-arr" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+
+          <!-- Happy Hours banner (shown 12:00-16:00 VN time) -->
+          <div class="happy-banner" id="happy-banner" style="display:none">
+            <div class="hb-header">
+              <span class="hb-fire">🔥</span>
+              <span class="hb-title">HAPPY HOURS</span>
+              <span class="hb-time">12:00 – 16:00</span>
+            </div>
+            <div class="hb-rows">
+              <div class="hb-row">
+                <span class="hb-icon">💨</span>
+                <div class="hb-text">
+                <span class="hb-name" data-i18n="hh_hookah">Кальян</span>
+                  <span class="hb-price"><s>549,000</s> <b>459,000 ₫</b></span>
+                </div>
+              </div>
+              <div class="hb-row">
+                <span class="hb-icon">🍹</span>
+                <div class="hb-text">
+                <span class="hb-name" data-i18n="hh_cocktails">Коктейли + разливное пиво</span>
+                  <span class="hb-price"><b>1 + 1 🎉</b></span>
+                </div>
+              </div>
+              <div class="hb-row">
+                <span class="hb-icon">🍽</span>
+                <div class="hb-text">
+                <span class="hb-name" data-i18n="hh_food">Все блюда кухни</span>
+                  <span class="hb-price"><b>− 10%</b></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p class="sec-label" data-i18n="sec_hall">Зал</p>
+          <div class="seg" id="hall-tabs">
+            <button class="seg-btn active" data-hall="main" data-i18n="hall_main">🏛 Основной зал</button>
+            <button class="seg-btn" data-hall="second" data-i18n="hall_second">🔝 2 этаж</button>
+          </div>
+
+          <!-- Floor plan container -->
+          <div class="floor-wrap">
+            <div class="floor-label-top">ВХОД / ENTRANCE</div>
+            <div id="floor-plan" class="floor-grid"></div>
+            <div class="floor-label-bot" id="floor-label-bot">
+              <div class="floor-stairs-wrap">
+                <svg width="30" height="18" viewBox="0 0 30 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <polyline points="1,17 1,11 11,11 11,6 21,6 21,1 29,1" stroke="rgba(30,45,90,.6)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <polyline points="25,1 29,1 29,5" stroke="rgba(30,45,90,.6)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span data-i18n="staircase">ЛЕСТНИЦА НА 2-Й ЭТАЖ</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="legend">
+            <span class="leg-item"><i class="led free"></i><span data-i18n="leg_free">Свободен</span></span>
+            <span class="leg-item"><i class="led pend"></i><span data-i18n="leg_pend">Ожидает</span></span>
+            <span class="leg-item"><i class="led enroute"></i><span data-i18n="leg_enroute">В пути</span></span>
+            <span class="leg-item"><i class="led busy"></i><span data-i18n="leg_busy">Занят</span></span>
+          </div>
+
+          <div class="sel-badge-wrap">
+            <div class="sel-badge" id="sel-badge" style="display:none">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span data-i18n="sel_badge_pre">Стол</span> <b id="sel-name">—</b> <span data-i18n="sel_badge_suf">выбран</span>
+            </div>
+          </div>
+
+          <div class="spacer"></div>
+        </div>
+        <div class="screen-foot">
+          <button class="pill primary" id="btn-to-datetime" data-i18n="btn_to_datetime" disabled>Выбрать дату и время →</button>
+        </div>
+      </div>
+
+      <!-- Screen 1: Date / Time selection -->
+      <div class="screen" id="s1">
+        <div class="scroller">
+
+          <div class="meta-pill glass-row-sm">
+            <span id="f-hall">—</span>
+            <span class="sep">·</span>
+            <span data-i18n="table_lbl">Стол </span><span id="f-table">—</span>
+          </div>
+
+          <p class="sec-label" data-i18n="sec_date">Дата</p>
+          <label class="glass-row tappable" id="date-row">
+            <span class="row-icon">📅</span>
+            <span class="row-label" id="date-display" data-i18n="date_placeholder">Выберите дату</span>
+            <input type="date" id="date-input" class="date-hidden"/>
+            <svg class="row-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </label>
+
+          <!-- Custom calendar for desktop Telegram -->
+          <div id="custom-cal" class="custom-cal" style="display:none">
+            <div class="custom-cal-header">
+              <button type="button" class="custom-cal-nav" id="cal-prev">◀</button>
+              <span class="custom-cal-title" id="cal-title">Март 2026 г.</span>
+              <button type="button" class="custom-cal-nav" id="cal-next">▶</button>
+            </div>
+            <div class="custom-cal-weekdays">
+              <span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span>
+            </div>
+            <div class="custom-cal-days" id="cal-days"></div>
+            <div class="custom-cal-footer">
+              <button type="button" class="custom-cal-reset" id="cal-reset">Сбросить</button>
+              <button type="button" class="custom-cal-ok" id="cal-ok">✔</button>
+            </div>
+          </div>
+
+          <p class="sec-label mt" data-i18n="sec_time">Время</p>
+          <div id="time-grid" class="time-grid"><span class="muted-text" data-i18n="time_placeholder">Выберите дату…</span></div>
+
+          <div class="spacer"></div>
+        </div>
+        <div class="screen-foot">
+          <button class="pill primary" id="btn-to-form" data-i18n="btn_continue" disabled>Продолжить →</button>
+        </div>
+      </div>
+
+      <!-- Screen 2: Form -->
+      <div class="screen" id="s2">
+        <div class="scroller">
+
+          <div class="booking-pill glass-row-sm">
+            <span id="p-hall">—</span><span class="sep">·</span>
+            <span id="p-table">—</span><span class="sep">·</span>
+            <span id="p-date">—</span><span class="sep">·</span>
+            <span id="p-time">—</span>
+          </div>
+
+          <!-- VIP guest banner (shown if guest found in DB) -->
+          <div id="guest-banner" class="guest-banner" style="display:none">
+            <span id="guest-badge" class="guest-badge"></span>
+            <div>
+              <div id="guest-name-found" class="guest-found-name"></div>
+              <div id="guest-visits" class="guest-visits-text"></div>
+            </div>
+          </div>
+
+          <!-- Deposit / capacity info -->
+          <div class="deposit-banner" id="deposit-banner" style="display:none">
+            <span class="dep-icon">💳</span>
+            <div class="dep-body">
+              <div class="dep-title" data-i18n="deposit_title">Требуется депозит</div>
+              <div class="dep-amount" id="dep-amount"></div>
+              <div class="dep-time" data-i18n="deposit_time">С 18:00 – 00:00</div>
+            </div>
+          </div>
+          <div class="cap-hint" id="cap-hint"></div>
+
+          <p class="sec-label mt" data-i18n="sec_guests">Гостей</p>
+          <div class="chip-row">
+            <button class="chip" data-n="1">1</button>
+            <button class="chip" data-n="2">2</button>
+            <button class="chip" data-n="3">3</button>
+            <button class="chip" data-n="4">4</button>
+            <button class="chip" data-n="5">5</button>
+            <button class="chip" data-n="6+">6+</button>
+          </div>
+
+          <p class="sec-label mt" data-i18n="sec_data">Данные</p>
+          <div class="input-card glass-card">
+            <div class="irow">
+              <span class="iicon">👤</span>
+              <input id="name-input" type="text" placeholder="Ваше имя" data-i18n-ph="ph_name" autocomplete="name" class="ifield"/>
+            </div>
+            <div class="idiv"></div>
+            <div class="irow">
+              <span class="iicon">📞</span>
+              <input id="phone-input" type="tel" placeholder="+7 XXX XXX XXXX" data-i18n-ph="ph_phone" autocomplete="tel" class="ifield"/>
+            </div>
+            <div class="idiv"></div>
+            <div class="irow">
+              <span class="iicon">✈️</span>
+              <input id="tg-input" type="text" placeholder="@username (необязательно)" data-i18n-ph="ph_tg" autocomplete="off" class="ifield"/>
+            </div>
+            <div class="idiv"></div>
+            <div class="irow irow-ta">
+              <span class="iicon">💬</span>
+              <textarea id="comment-input" placeholder="Пожелания, повод (необязательно)" data-i18n-ph="ph_comment" rows="2" class="ifield itextarea"></textarea>
+            </div>
+          </div>
+
+          <div class="spacer"></div>
+        </div>
+        <div class="screen-foot">
+          <button class="pill primary" id="btn-submit" data-i18n="btn_submit">Подтвердить бронь</button>
+          <p class="foot-note" data-i18n="foot_note">Администратор подтвердит в течение 15 мин</p>
+        </div>
+      </div>
+
+      <!-- Screen 3: Success -->
+      <div class="screen" id="s3">
+        <div class="scroller success-wrap">
+          <div class="success-blob">
+            <div class="blob-ring"></div>
+            <div class="blob-icon">
+              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+          <h2 class="done-title" data-i18n="done_title">Бронь принята!</h2>
+          <p class="done-sub" id="done-text"></p>
+          <div class="done-card" id="done-card"></div>
+        </div>
+        <div class="screen-foot">
+          <button class="pill primary" id="btn-go-bookings" data-i18n="btn_my_bookings">📋 Мои бронирования</button>
+          <button class="pill ghost" style="margin-top:8px" id="btn-close-app" data-i18n="btn_close" onclick="window.Telegram?.WebApp?.close()">Закрыть</button>
+        </div>
+      </div>
+
+    </div><!-- /screens -->
+  </div><!-- /booking-view -->
+
+  <!-- ── Staff Panel ── -->
+  <div id="staff-view" style="display:none">
+    <div class="staff-header">
+      <div>
+        <div class="staff-title" id="staff-title">🔔 Ожидают подтверждения</div>
+        <div class="staff-sub" id="staff-count">Загрузка…</div>
+      </div>
+      <button class="icon-btn" id="staff-refresh" data-i18n-title="refresh">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      </button>
+    </div>
+    <div class="staff-filters" style="gap:6px;padding:10px 10px 6px">
+      <button class="seg-btn active" data-filter="pending" id="filter-pending" style="flex:1;padding:8px 6px;font-size:12px">
+        <span data-i18n="filter_pending">🔔 Ожидают</span>
+        <span class="filter-badge" id="filter-pending-badge" style="display:none">0</span>
+      </button>
+      <button class="seg-btn" data-filter="confirmed_today" id="filter-confirmed" style="flex:1;padding:8px 6px;font-size:12px">
+        <span data-i18n="filter_confirmed">✅ Подтв.</span>
+      </button>
+      <button class="seg-btn" data-filter="en_route" id="filter-enroute" style="flex:1;padding:8px 6px;font-size:12px">
+        <span data-i18n="filter_en_route">🟠 В пути</span>
+        <span class="filter-badge" id="filter-enroute-badge" style="display:none">0</span>
+      </button>
+    </div>
+    <div id="staff-list" class="staff-list">
+      <div class="muted-text" style="text-align:center;padding:40px 0" data-i18n="loading">Загрузка…</div>
+    </div>
+  </div><!-- /staff-view -->
+
+  <!-- ── Live Tables View ── -->
+  <div id="tables-view" style="display:none">
+    <div class="staff-header">
+      <div>
+        <div class="staff-title" id="tables-title" data-i18n="tables_title">🗺️ Столы онлайн</div>
+        <div class="staff-sub" id="tables-updated" data-i18n="tables_now">Сейчас</div>
+      </div>
+      <button class="icon-btn" id="tables-refresh" data-i18n-title="refresh">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      </button>
+    </div>
+    <div class="staff-filters" id="tables-hall-tabs">
+      <button class="seg-btn active" data-lhall="main" data-i18n="hall_label_main">🏛 Основной зал</button>
+      <button class="seg-btn" data-lhall="second" data-i18n="hall_label_second">🔝 2nd Floor</button>
+    </div>
+    <div id="tables-fp-wrap" class="tables-fp-wrap">
+      <div class="floor-wrap" id="tables-floor-wrap">
+        <div class="floor-label-top">ВХОД / ENTRANCE</div>
+        <div id="tables-floor" class="floor-grid"></div>
+        <div class="floor-label-bot" id="tables-label-bot">
+          <div class="floor-stairs-wrap">
+            <svg width="30" height="18" viewBox="0 0 30 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <polyline points="1,17 1,11 11,11 11,6 21,6 21,1 29,1" stroke="rgba(30,45,90,.6)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <polyline points="25,1 29,1 29,5" stroke="rgba(30,45,90,.6)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span data-i18n="staircase">ЛЕСТНИЦА НА 2-Й ЭТАЖ</span>
+          </div>
+        </div>
+      </div>
+      <!-- legend -->
+      <div class="legend" style="margin-top:12px">
+        <span class="leg-item"><i class="led free"></i><span data-i18n="leg_free">Свободен</span></span>
+        <span class="leg-item"><i class="led pend"></i><span data-i18n="leg_pend">Ожидает</span></span>
+        <span class="leg-item"><i class="led enroute"></i><span data-i18n="leg_enroute">В пути</span></span>
+        <span class="leg-item"><i class="led busy"></i><span data-i18n="live_busy">Забронирован</span></span>
+      </div>
+    </div>
+  </div><!-- /tables-view -->
+
+  <!-- ── Regulars View ── -->
+  <div id="regulars-view" style="display:none">
+    <div class="staff-header">
+      <div>
+        <div class="staff-title" data-i18n="regulars_title">⭐ Постоянники</div>
+        <div class="staff-sub" id="regulars-count">Загрузка…</div>
+      </div>
+      <div style="display:flex;gap:8px">
+      <button class="icon-btn" id="regulars-add" title="" data-i18n-title="add_guest_title" style="font-size:18px;font-weight:700;color:var(--c-accent)">+</button>
+        <button class="icon-btn" id="regulars-refresh" data-i18n-title="refresh">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        </button>
+      </div>
+    </div>
+    <!-- Sub-tabs: Guests / Blacklist -->
+    <div class="staff-filters" style="margin-bottom:4px" id="reg-subtabs">
+      <button class="seg-btn active" id="reg-subtab-guests" data-i18n="reg_subtab_guests">👥 Гости</button>
+      <button class="seg-btn" id="reg-subtab-blacklist" data-i18n="reg_subtab_blacklist">🚫 Чёрный список</button>
+    </div>
+    <!-- Guests panel -->
+    <div id="reg-panel-guests">
+      <div class="staff-filters" style="margin-bottom:4px">
+        <button class="seg-btn active" id="reg-filter-all" data-i18n="reg_filter_all">👥 Все</button>
+        <button class="seg-btn" id="reg-filter-vip">⭐ VIP</button>
+      </div>
+      <div class="reg-search-wrap">
+        <span style="font-size:16px">🔍</span>
+        <input type="text" id="regulars-search" placeholder="Имя или телефон…" class="reg-search-input" autocomplete="off"/>
+      </div>
+      <div id="regulars-list" class="staff-list"></div>
+    </div>
+    <!-- Blacklist panel -->
+    <div id="reg-panel-blacklist" style="display:none">
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px">
+        <button class="icon-btn" id="blacklist-add-btn" style="font-size:18px;font-weight:700;color:#ef4444">+</button>
+        <div class="reg-search-wrap" style="flex:1;margin-bottom:0">
+          <span style="font-size:16px">🔍</span>
+          <input type="text" id="blacklist-search" placeholder="Имя, телефон или @username…" class="reg-search-input" autocomplete="off"/>
+        </div>
+      </div>
+      <div id="blacklist-list" class="staff-list"></div>
+    </div>
+  </div><!-- /regulars-view -->
+
+  <nav class="tab-bar" id="tab-bar" style="display:none">
+    <button class="tab active" id="tab-book">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <span data-i18n="tab_booking">Бронирование</span>
+    </button>
+    <button class="tab" id="tab-staff-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span data-i18n="tab_bookings">Брони</span>
+      <span class="tab-badge" id="tab-badge" style="display:none">0</span>
+    </button>
+    <button class="tab" id="tab-tables-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      <span data-i18n="tab_tables">Столы</span>
+    </button>
+    <button class="tab" id="tab-regulars-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <span data-i18n="tab_guests">Гости</span>
+    </button>
+  </nav>
+
+  <!-- ── Table Info Sheet ── -->
+  <div class="table-sheet" id="table-sheet" style="display:none">
+    <div class="ts-overlay" id="ts-overlay"></div>
+    <div class="ts-card">
+      <div class="ts-handle"></div>
+      <div class="ts-header">
+        <span class="ts-icon" id="ts-icon">🛋</span>
+        <div class="ts-header-text">
+          <div class="ts-title" id="ts-title">Table</div>
+          <div class="ts-subtitle" id="ts-note"></div>
+        </div>
+      </div>
+      <div class="ts-rows">
+        <div class="ts-row">
+          <span class="ts-row-label" data-i18n="ts_cap_lbl">👥 Вместимость</span>
+          <span class="ts-row-val" id="ts-cap">—</span>
+        </div>
+        <div class="ts-row" style="align-items:flex-start">
+          <span class="ts-row-label" data-i18n="ts_dep_lbl">💳 Депозит</span>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px">
+            <span class="ts-row-val" id="ts-deposit">—</span>
+            <span id="ts-dep-time" style="display:none;font-size:10px;color:var(--c-sub)" data-i18n="deposit_time">С 18:00 – 00:00</span>
+          </div>
+        </div>
+      </div>
+      <!-- Live bookings list (shown in Столы tab only) -->
+      <div id="ts-bookings-section" style="display:none;margin-top:12px">
+        <div style="font-size:12px;font-weight:600;color:var(--c-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px" data-i18n="ts_bookings_lbl">📋 Брони на сегодня</div>
+        <div id="ts-bookings-list" style="display:flex;flex-direction:column;gap:8px;max-height:240px;overflow-y:auto"></div>
+      </div>
+      <div class="ts-warn" id="ts-warn" style="display:none"></div>
+      <button class="pill primary" id="ts-confirm" data-i18n="ts_confirm" style="touch-action:manipulation">Выбрать этот стол</button>
+      <button class="pill ghost" id="ts-cancel" data-i18n="ts_cancel" style="touch-action:manipulation;margin-top:8px">Отмена</button>
+    </div>
+  </div>
+
+  <!-- ── My Bookings Sheet (guest) ── -->
+  <div class="table-sheet" id="my-bookings-sheet" style="display:none">
+    <div class="ts-overlay" id="mbs-overlay"></div>
+    <div class="ts-card" style="max-height:85vh">
+      <div class="ts-handle"></div>
+      <div class="ts-header" style="justify-content:space-between;align-items:center">
+        <div class="ts-title" style="font-size:16px" data-i18n="mbs_title">📋 Мои бронирования</div>
+        <button class="icon-btn" id="mbs-close" style="width:32px;height:32px">✕</button>
+      </div>
+      <div id="my-bookings-list" style="overflow-y:auto;max-height:55vh;display:flex;flex-direction:column;gap:10px;padding:4px 0 8px"></div>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<script src="/static/app.js?v={{ asset_v }}"></script>
+<script>
+/* ── Venue hero photo slider ── */
+(function(){
+  const track = document.getElementById('venue-hero-track');
+  const dots  = document.querySelectorAll('.vhd');
+  if (!track || !dots.length) return;
+  let cur = 0, total = dots.length, timer;
+  function go(i) {
+    cur = ((i % total) + total) % total;
+    track.style.transform = 'translateX(-' + (cur * (100 / total)) + '%)';
+    dots.forEach((d, idx) => d.classList.toggle('active', idx === cur));
+  }
+  dots.forEach(d => d.addEventListener('click', function() {
+    go(+this.dataset.slide); clearInterval(timer); timer = setInterval(() => go(cur + 1), 5000);
+  }));
+  /* Swipe support — горизонтальный: смена слайда, вертикальный: скролл */
+  let sx = 0, sy = 0, dir = null;
+  track.addEventListener('touchstart', e => {
+    sx = e.touches[0].clientX;
+    sy = e.touches[0].clientY;
+    dir = null;
+  }, {passive: true});
+  track.addEventListener('touchmove', e => {
+    if (dir === null) {
+      const dx = Math.abs(e.touches[0].clientX - sx);
+      const dy = Math.abs(e.touches[0].clientY - sy);
+      if (dx > 6 || dy > 6) dir = dx >= dy ? 'h' : 'v';
+    }
+    if (dir === 'h') e.preventDefault();
+  }, {passive: false});
+  track.addEventListener('touchend', e => {
+    if (dir === 'h') {
+      const dx = e.changedTouches[0].clientX - sx;
+      if (Math.abs(dx) > 40) { go(cur + (dx < 0 ? 1 : -1)); clearInterval(timer); timer = setInterval(() => go(cur + 1), 5000); }
+    }
+  }, {passive: true});
+  timer = setInterval(() => go(cur + 1), 5000);
+})();
+</script>
+</body>
+</html>
