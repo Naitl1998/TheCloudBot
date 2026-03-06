@@ -346,11 +346,95 @@ async def handle_contacts(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 # --- Лёгкий HTTP-сервер для Render (бесплатный план требует веб-порт) ---
+
+MINI_APP_HTML = b"""<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Cloud — Бронирование</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0d0d0d;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+    }
+    .logo { font-size: 56px; margin-bottom: 12px; }
+    h1 { font-size: 28px; letter-spacing: 2px; margin-bottom: 4px; }
+    .sub { font-size: 13px; color: #aaa; letter-spacing: 3px; margin-bottom: 40px; }
+    .info {
+      background: #1a1a1a;
+      border-radius: 16px;
+      padding: 20px 24px;
+      width: 100%;
+      max-width: 360px;
+      margin-bottom: 24px;
+    }
+    .info p { font-size: 14px; color: #ccc; margin-bottom: 10px; }
+    .info p:last-child { margin-bottom: 0; }
+    .info span { color: #fff; font-weight: 600; }
+    .btn {
+      display: block;
+      width: 100%;
+      max-width: 360px;
+      padding: 16px;
+      background: #fff;
+      color: #000;
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      letter-spacing: 0.5px;
+    }
+    .btn:active { opacity: 0.85; }
+  </style>
+</head>
+<body>
+  <div class="logo">☁️</div>
+  <h1>THE CLOUD</h1>
+  <p class="sub">EAT &bull; SMOKE &bull; DRINK</p>
+  <div class="info">
+    <p>📍 <span>163 Nguyen Thien Thuat</span></p>
+    <p>🕐 Работаем: <span>12:00 — 02:00</span></p>
+    <p>📞 <span>+84 (794) 533-508</span></p>
+  </div>
+  <a class="btn" href="https://t.me/Booking_The_CloudBot?start=book">
+    📅 Забронировать столик
+  </a>
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+    if (tg.colorScheme === 'light') {
+      document.body.style.background = '#f5f5f5';
+      document.body.style.color = '#000';
+    }
+  </script>
+</body>
+</html>"""
+
 class HealthHandler(BaseHTTPRequestHandler):
     def do_GET(self):
-        self.send_response(200)
-        self.end_headers()
-        self.wfile.write(b"OK")
+        if self.path == '/health':
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(b"OK")
+        else:
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/html; charset=utf-8')
+            self.end_headers()
+            self.wfile.write(MINI_APP_HTML)
     def log_message(self, *args):
         pass  # Отключаем лишние логи
 
