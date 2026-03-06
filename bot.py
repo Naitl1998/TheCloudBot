@@ -108,6 +108,9 @@ def main_menu():
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Отправляет картинку + приветствие при /start"""
+    inline_kb = InlineKeyboardMarkup([
+        [InlineKeyboardButton("📅 Забронировать столик", callback_data="inline_book")]
+    ])
     try:
         with open(PHOTO_PATH, "rb") as photo:
             await update.message.reply_photo(
@@ -118,20 +121,16 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     "Нажмите кнопку ниже, чтобы забронировать столик."
                 ),
                 parse_mode="Markdown",
-                reply_markup=main_menu()
+                reply_markup=inline_kb
             )
     except FileNotFoundError:
-        # Если картинки нет — просто текст
         await update.message.reply_text(
             "☁️ *Добро пожаловать в The Cloud!*\n\n"
             "Мы рады видеть вас 🎉\n"
             "Нажмите кнопку ниже, чтобы забронировать столик.",
             parse_mode="Markdown",
-            reply_markup=main_menu()
+            reply_markup=inline_kb
         )
-    # Если пришли из Mini App (/start book) — сразу открываем бронирование
-    if context.args and context.args[0] == "book":
-        await booking_start(update, context)
 
 
 # ====== Бронирование: ConversationHandler ======
@@ -297,6 +296,21 @@ async def confirm_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return ConversationHandler.END
 
     return CONFIRM
+
+
+async def inline_book_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Нажатие инлайн-кнопки 'Забронировать' прямо из приветствия."""
+    query = update.callback_query
+    await query.answer()
+    await query.edit_message_caption(
+        caption=(
+            "☁️ *Добро пожаловать в The Cloud!*\n\n"
+            "Мы рады видеть вас 🎉\n"
+            "Нажмите кнопку ниже, чтобы забронировать столик."
+        ),
+        parse_mode="Markdown"
+    )
+    await booking_start(update, context)
 
 
 async def handle_web_app_data(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -486,6 +500,7 @@ def main():
     )
 
     app.add_handler(CommandHandler("start", start))
+    app.add_handler(CallbackQueryHandler(inline_book_handler, pattern="^inline_book$"))
     app.add_handler(MessageHandler(filters.StatusUpdate.WEB_APP_DATA, handle_web_app_data))
     app.add_handler(booking_conv)
     app.add_handler(MessageHandler(filters.Regex("^📋 Мои бронирования$"), handle_my_bookings))
