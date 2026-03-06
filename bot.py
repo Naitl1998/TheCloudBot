@@ -337,11 +337,6 @@ async def handle_contacts(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 def main():
-    # Порт назначает Render автоматически, по умолчанию 10000
-    PORT = int(os.environ.get("PORT", 10000))
-    # Адрес твоего сервера на Render
-    WEBHOOK_DOMAIN = os.environ.get("WEBHOOK_DOMAIN", "https://the-cloud-booking.onrender.com")
-
     app = ApplicationBuilder().token(BOT_TOKEN).build()
 
     # Conversation для бронирования
@@ -369,15 +364,8 @@ def main():
     app.add_handler(MessageHandler(filters.Regex("^ℹ️ О нас$"), handle_about))
     app.add_handler(MessageHandler(filters.Regex("^📞 Контакты$"), handle_contacts))
 
-    print(f"Bot The Cloud started (webhook mode) on port {PORT}...")
-    # Webhook режим: Телеграм сам присылает обновления на сервер Render
-    app.run_webhook(
-        listen="0.0.0.0",
-        port=PORT,
-        url_path="/webhook",
-        webhook_url=f"{WEBHOOK_DOMAIN}/webhook",
-        drop_pending_updates=True,
-    )
+    print("Bot The Cloud started (polling mode)...")
+    app.run_polling(drop_pending_updates=True)
 
 
 if __name__ == "__main__":

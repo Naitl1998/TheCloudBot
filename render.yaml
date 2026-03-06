@@ -1,11 +1,9 @@
 services:
-  - type: web
-    name: the-cloud-booking
+  - type: worker
+    name: the-cloud-bot
     runtime: python
     buildCommand: pip install -r requirements.txt
     startCommand: python bot.py
     envVars:
       - key: BOT_TOKEN
-        sync: false
-      - key: WEBHOOK_DOMAIN
         sync: false
