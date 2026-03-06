@@ -358,7 +358,7 @@ async def handle_contacts(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # --- Лёгкий HTTP-сервер для Render (бесплатный план требует веб-порт) ---
 
-MINI_APP_HTML = b"""<!DOCTYPE html>
+MINI_APP_HTML = """<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8"/>
@@ -448,7 +448,7 @@ class HealthHandler(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Content-Type', 'text/html; charset=utf-8')
             self.end_headers()
-            self.wfile.write(MINI_APP_HTML)
+            self.wfile.write(MINI_APP_HTML.encode('utf-8'))
     def log_message(self, *args):
         pass  # Отключаем лишние логи
 
