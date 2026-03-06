@@ -129,6 +129,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
             parse_mode="Markdown",
             reply_markup=main_menu()
         )
+    # Если пришли из Mini App (/start book) — сразу открываем бронирование
+    if context.args and context.args[0] == "book":
+        await booking_start(update, context)
 
 
 # ====== Бронирование: ConversationHandler ======
@@ -296,6 +299,14 @@ async def confirm_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return CONFIRM
 
 
+async def handle_web_app_data(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Обрабатываем данные из Mini App — сразу начинаем бронирование."""
+    data = update.message.web_app_data.data
+    if data == 'start_booking':
+        await start(update, context)
+        await booking_start(update, context)
+
+
 async def cancel_booking(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Команда /cancel — выход из бронирования."""
     await update.message.reply_text("❌ Бронирование отменено.", reply_markup=main_menu())
@@ -409,9 +420,9 @@ MINI_APP_HTML = b"""<!DOCTYPE html>
     <p>🕐 Работаем: <span>12:00 — 02:00</span></p>
     <p>📞 <span>+84 (794) 533-508</span></p>
   </div>
-  <a class="btn" href="https://t.me/Booking_The_CloudBot?start=book">
+  <button class="btn" onclick="startBooking()">
     📅 Забронировать столик
-  </a>
+  </button>
   <script>
     const tg = window.Telegram.WebApp;
     tg.ready();
@@ -419,6 +430,9 @@ MINI_APP_HTML = b"""<!DOCTYPE html>
     if (tg.colorScheme === 'light') {
       document.body.style.background = '#f5f5f5';
       document.body.style.color = '#000';
+    }
+    function startBooking() {
+      tg.sendData('start_booking');
     }
   </script>
 </body>
@@ -472,6 +486,7 @@ def main():
     )
 
     app.add_handler(CommandHandler("start", start))
+    app.add_handler(MessageHandler(filters.StatusUpdate.WEB_APP_DATA, handle_web_app_data))
     app.add_handler(booking_conv)
     app.add_handler(MessageHandler(filters.Regex("^📋 Мои бронирования$"), handle_my_bookings))
     app.add_handler(MessageHandler(filters.Regex("^ℹ️ О нас$"), handle_about))
