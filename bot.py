@@ -302,6 +302,13 @@ async def cancel_booking(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return ConversationHandler.END
 
 
+async def start_reset(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Обёртка /start внутри диалога — сбрасывает бронирование и показывает приветствие."""
+    context.user_data.clear()
+    await start(update, context)
+    return ConversationHandler.END
+
+
 # ====== Обычные кнопки меню ======
 
 async def handle_my_bookings(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -373,6 +380,7 @@ def main():
             CONFIRM:    [CallbackQueryHandler(confirm_handler)],
         },
         fallbacks=[
+            CommandHandler("start", start_reset),
             CommandHandler("cancel", cancel_booking),
             MessageHandler(filters.Regex("^📅 Забронировать столик$"), booking_start),
         ],
