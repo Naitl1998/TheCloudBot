@@ -2,6 +2,8 @@ import sys
 import os
 import logging
 import calendar
+import threading
+from http.server import HTTPServer, BaseHTTPRequestHandler
 from datetime import datetime, timedelta
 from telegram import Update, ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
@@ -336,7 +338,26 @@ async def handle_contacts(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
+# --- Лёгкий HTTP-сервер для Render (бесплатный план требует веб-порт) ---
+class HealthHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b"OK")
+    def log_message(self, *args):
+        pass  # Отключаем лишние логи
+
+def run_health_server():
+    port = int(os.environ.get("PORT", 10000))
+    server = HTTPServer(("0.0.0.0", port), HealthHandler)
+    server.serve_forever()
+
+
 def main():
+    # Запускаем HTTP-сервер в отдельном потоке (для Render)
+    t = threading.Thread(target=run_health_server, daemon=True)
+    t.start()
+
     app = ApplicationBuilder().token(BOT_TOKEN).build()
 
     # Conversation для бронирования
