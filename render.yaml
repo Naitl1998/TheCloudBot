@@ -1,9 +1,7 @@
 services:
   - type: web
     name: the-cloud-bot
-    runtime: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: python bot.py
+    runtime: docker
     envVars:
       - key: BOT_TOKEN
         sync: false
