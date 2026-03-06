@@ -3,19 +3,15 @@ import os
 import logging
 import calendar
 from datetime import datetime, timedelta
-
-# Исправление кодировки для Windows (чтобы эмодзи не ломали запуск)
-if sys.stdout.encoding != 'utf-8':
-    sys.stdout.reconfigure(encoding='utf-8')
-if sys.stderr.encoding != 'utf-8':
-    sys.stderr.reconfigure(encoding='utf-8')
 from telegram import Update, ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
     ApplicationBuilder, CommandHandler, MessageHandler,
     CallbackQueryHandler, ConversationHandler, filters, ContextTypes
 )
 
-BOT_TOKEN = "8780268115:AAEeOZ1vAjTd2BiLaAA_IS_Pz2cuPnkuMGM"
+BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
+if not BOT_TOKEN:
+    raise ValueError("BOT_TOKEN не задан! Добавь его в переменные окружения на Render.")
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
