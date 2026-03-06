@@ -9,9 +9,7 @@ from telegram.ext import (
     CallbackQueryHandler, ConversationHandler, filters, ContextTypes
 )
 
-BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
-if not BOT_TOKEN:
-    raise ValueError("BOT_TOKEN не задан! Добавь его в переменные окружения на Render.")
+BOT_TOKEN = os.environ.get("BOT_TOKEN", "8780268115:AAEeOZ1vAjTd2BiLaAA_IS_Pz2cuPnkuMGM")
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
