@@ -457,12 +457,17 @@ async def get_bookings_for_table(hall: str, table: str, date: str) -> list[Booki
 
 @with_db_retry()
 async def close_table_bookings(hall: str, table: str, date: str) -> int:
-    """Mark only CURRENT (already started) bookings for this table as COMPLETED.
-    Future bookings (time > current time) are preserved and NOT touched.
+    """Mark CURRENT (already started but not yet ended) bookings for this table as COMPLETED.
+    Future bookings (their duration window hasn't started yet) are preserved.
+    Uses minute-based comparison to correctly handle overnight slots (00-02h).
     Counts real guest visits (skips walk-ins with phone '—')."""
     import datetime as _dt
+    from bot.config import TABLE_CAPACITIES, table_duration_minutes
     vn_offset = _dt.timezone(_dt.timedelta(hours=7))
-    current_time = _dt.datetime.now(vn_offset).strftime("%H:%M")
+    now_str = _dt.datetime.now(vn_offset).strftime("%H:%M")
+    current_min = _time_to_min(now_str)
+    cap = TABLE_CAPACITIES.get(hall, {}).get(table, 2)
+    dur = table_duration_minutes(cap)
 
     closed_visits: list[tuple[str, str]] = []  # (phone, name) for visit counting
     async with AsyncSessionLocal() as session:
@@ -472,14 +477,19 @@ async def close_table_bookings(hall: str, table: str, date: str) -> int:
             .where(Booking.table == table)
             .where(Booking.date == date)
             .where(Booking.status.in_([BookingStatus.PENDING, BookingStatus.CONFIRMED, BookingStatus.EN_ROUTE]))
-            .where(Booking.time <= current_time)
         )
         bookings = result.scalars().all()
+        closed_count = 0
         for b in bookings:
-            b.status = BookingStatus.COMPLETED
-            # Collect real guests only (skip walkin placeholder '—')
-            if b.phone and b.phone not in ("—", "-", ""):
-                closed_visits.append((b.phone, b.name or ""))
+            start = _time_to_min(b.time)
+            end = start + dur
+            # Close bookings that have already started (future ones preserved)
+            if start <= current_min:
+                b.status = BookingStatus.COMPLETED
+                closed_count += 1
+                # Collect real guests only (skip walkin placeholder '—')
+                if b.phone and b.phone not in ("—", "-", ""):
+                    closed_visits.append((b.phone, b.name or ""))
         await session.commit()
 
     # Increment visit counter AFTER session is closed — failure here never
@@ -487,7 +497,7 @@ async def close_table_bookings(hall: str, table: str, date: str) -> int:
     for phone, name in closed_visits:
         await _increment_guest_visits(phone=phone, name=name)
 
-    return len(bookings)
+    return closed_count
 
 
 @with_db_retry()
